@@ -20,6 +20,6 @@ public class Player : MonoBehaviour
 		mMovement.x = Input.GetAxisRaw("Horizontal") * speed;
 		mMovement.y = -gravity * speed;
 		mMovement.z = speed;
-		//mCharacterController.Move(mMovement * Time.deltaTime);
+		mCharacterController.Move(mMovement * Time.deltaTime);
 	}
 }

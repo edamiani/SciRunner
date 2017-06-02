@@ -27,9 +27,12 @@ public class Camera : MonoBehaviour
 
 		Vector3 direction = objectToFollow.position - transform.position;
 
+		Vector3 pointToFollow = objectToFollow.position;
+		pointToFollow.y = transform.position.y;
+
 		if(direction.magnitude > distance)
 		{
-			transform.position = Vector3.Lerp(transform.position, direction.normalized * Time.deltaTime, 0.5f);
+			transform.position = Vector3.Lerp(transform.position, pointToFollow, 0.01f);
 		}
 	}
 }
