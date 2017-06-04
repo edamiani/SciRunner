@@ -30,7 +30,7 @@ public class Camera : MonoBehaviour
 		Vector3 pointToFollow = objectToFollow.position;
 		pointToFollow.y = transform.position.y;
 
-		if(direction.magnitude > distance)
+		if(direction.magnitude > distance * 1.05)
 		{
 			transform.position = Vector3.Lerp(transform.position, pointToFollow, 0.01f);
 		}
