@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 	public float				lateralMovementRange = 1.0f;
 	public float				lateralMovementDuration = 1.0f;
 	public float				speed = 1;
+	public float				speedIncreaseRate = 0.2f;
 	public GuiManager			guiManager;
 
 	private float				mCenterX = 0;
@@ -105,6 +106,8 @@ public class Player : MonoBehaviour
 			mMovement.y = -gravity * speed * Time.deltaTime;
 			mMovement.z = speed * Time.deltaTime;
 			mCharacterController.Move(mMovement);
+
+			speed += speedIncreaseRate * Time.deltaTime;
 		}
 	}
 

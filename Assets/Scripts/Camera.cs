@@ -9,6 +9,7 @@ public class Camera : MonoBehaviour
 	public float		rotationInDegrees = 30;
 
 	private Vector3		mPosition;
+	private Vector3		mVelocity = Vector3.one;
 
 	void Start ()
 	{
@@ -29,10 +30,13 @@ public class Camera : MonoBehaviour
 
 		Vector3 pointToFollow = objectToFollow.position;
 		pointToFollow.y = transform.position.y;
+		//pointToFollow.z -= distance;
 
 		if(direction.magnitude > distance * 1.05)
 		{
-			transform.position = Vector3.Lerp(transform.position, pointToFollow, 0.01f);
+			transform.position = Vector3.Lerp(transform.position, pointToFollow, 1 - (distance / direction.magnitude));
+
+			Debug.Log(direction.magnitude + "   " + (1 - (distance / direction.magnitude)));
 		}
 	}
 }
