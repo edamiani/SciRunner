@@ -1,9 +1,18 @@
-﻿using System.Collections;
+﻿/******************************************************************************
+* 
+* Class name: Player
+* Created by: Edgard Damiani
+* Description: Handles player's movement and energy  
+* 
+******************************************************************************/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+	/*********************** Public properties *****************************/
 	public int					energy = 2;
 	public float				gravity	= 9.8f;
 	public float				lateralMovementRange = 1.0f;
@@ -12,6 +21,8 @@ public class Player : MonoBehaviour
 	public float				speedIncreaseRate = 0.2f;
 	public GuiManager			guiManager;
 
+
+	/*********************** Private properties *****************************/
 	private float				mCenterX = 0;
 	private CharacterController mCharacterController;
 	private float				mLateralMovementTimer = 0;
@@ -20,7 +31,24 @@ public class Player : MonoBehaviour
 	private Vector3				mMovement;
 	private int					mTilePosition = 0;
 
-	void Start()
+
+	/*********************** Public methods *****************************/
+	public void DecreaseEnergy()
+	{
+		energy--;
+
+		GetComponentInChildren<ParticleSystem>().Play();
+
+		if(energy == 0)
+		{
+			transform.Find("PlayerMesh").gameObject.SetActive(false);
+
+			guiManager.ShowGameOverMenu();
+		}
+	}
+
+	/*********************** Private methods *****************************/
+	private void Start()
 	{
 		mCharacterController = GetComponentInChildren<CharacterController>();
 
@@ -29,7 +57,7 @@ public class Player : MonoBehaviour
 		GetComponentInChildren<ParticleSystem>().Stop();
 	}
 	
-	void Update()
+	private void Update()
 	{
 		if(energy > 0)
 		{
@@ -108,20 +136,6 @@ public class Player : MonoBehaviour
 			mCharacterController.Move(mMovement);
 
 			speed += speedIncreaseRate * Time.deltaTime;
-		}
-	}
-
-	public void DecreaseEnergy()
-	{
-		energy--;
-
-		GetComponentInChildren<ParticleSystem>().Play();
-
-		if(energy == 0)
-		{
-			transform.Find("PlayerMesh").gameObject.SetActive(false);
-
-			guiManager.ShowGameOverMenu();
 		}
 	}
 }

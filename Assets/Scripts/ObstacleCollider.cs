@@ -1,16 +1,24 @@
-﻿using System.Collections;
+﻿/******************************************************************************
+* 
+* Class name: ObstacleCollider
+* Created by: Edgard Damiani
+* Description: Takes care of an obstacle's collision 
+* 
+******************************************************************************/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ObstacleCollider : MonoBehaviour
 {
-	// Use this for initialization
-	void Start ()
+	/*********************** Private methods *****************************/
+	private void Start()
 	{
+
 	}
 	
-	// Update is called once per frame
-	void Update ()
+	private void Update()
 	{
 		
 	}

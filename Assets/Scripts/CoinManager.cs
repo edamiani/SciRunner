@@ -1,38 +1,61 @@
-﻿using System.Collections;
+﻿/******************************************************************************
+* 
+* Class name: CoinManager
+* Created by: Edgard Damiani
+* Description: Manages the creation and destruction of coins
+* 
+******************************************************************************/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CoinManager : MonoBehaviour
 {
-	public float		distanceToRemove = 50;
+	/*********************** Public properties *****************************/
+	/// <summary>Object's Transform that will be used to track coins' 
+	/// life span.</summary>
 	public Transform	targetToTrack;
-	public ObjectPooler	coinPooler;
-	public float		distanceBetweenCoins = 3;
-	public int			coinsAfterPlayer = 30;
 
-	private float		mDistanceAfter;
-	private LinkedList<GameObject> 
+	/// <summary>The object pooler that will hold the coins.</summary>
+	public ObjectPooler	coinPooler;
+
+	/// <summary>Distance between coins.</summary>
+	public float		distanceBetweenCoins = 3;
+
+	/// <summary>Number of coins to be created ahead of the 
+	/// tracked object.</summary>
+	public int			coinsAfterTrackedObject = 30;
+
+
+	/*********************** Private properties *****************************/
+	/// <summary>A doubly-linked list of coins.</summary>
+	private LinkedList<GameObject>
 						mCoinList = new LinkedList<GameObject>();
 
-	// Use this for initialization
-	void Start ()
-	{
-		coinPooler.Initialize();
+	/// <summary>Holds the distance that should be traversed by the
+	/// tracked object so that new coins are creatd.</summary>
+	private float		mDistanceAfter;	
 
+
+	/*********************** Private methods *****************************/
+	void Start()
+	{
 		Vector3 position = targetToTrack.position;
 
-		mDistanceAfter = position.z + coinsAfterPlayer * distanceBetweenCoins;
+		mDistanceAfter = position.z + coinsAfterTrackedObject * distanceBetweenCoins;
 
 		position.z += distanceBetweenCoins;
 
-		for(int i = 0; i < coinsAfterPlayer; i++)
+		for(int i = 0; i < coinsAfterTrackedObject; i++)
 		{
 			Vector3 tempPosition = position;
 
 			GameObject coin = coinPooler.GetObject();
 
+			// Defines a coin's position on the X-axis inside the [-1, 2) range
+			// This could be modified to generalize the range and distance between objects
 			int xOffset = Random.Range(-1, 2);
-
 			Vector3 innerOffset = Vector3.zero;
 
 			if(xOffset == -1)
@@ -49,26 +72,28 @@ public class CoinManager : MonoBehaviour
 			Transform innerTransform = coin.transform.Find("Inner").transform;
 			innerTransform.Translate(innerOffset);
 
-			coin.SetActive(true);
-
+			// Activates the coin, add it to the coin list and position it on the Z-axis
+			// (Coins will always be inserted at the end of the list and removed from
+			// the beginning)
+			coin.SetActive(true);			
 			mCoinList.AddLast(coin);
-
 			position.z += distanceBetweenCoins;
 		}
 	}
 	
-	// Update is called once per frame
-	void Update ()
+	void Update()
 	{
 		Vector3 targetPosition = targetToTrack.position;
 
-		if(targetPosition.z > mDistanceAfter - (3 * distanceBetweenCoins))
+		// Is the tracked object getting closer to the prescribed distance so new coins should be added?
+		if(targetPosition.z > mDistanceAfter - ((coinsAfterTrackedObject / 3) * distanceBetweenCoins))
 		{
+			// Removes the list's first coin from scene so it can be re-added as a new coin
 			mCoinList.First.Value.SetActive(false);
 			mCoinList.RemoveFirst();
 
-			GameObject obstacle = coinPooler.GetObject();
-			Transform innerTransform = obstacle.transform.Find("Inner").transform;
+			GameObject coin = coinPooler.GetObject();
+			Transform innerTransform = coin.transform.Find("Inner").transform;
 
 			// Resets obstacle's local position
 			Vector3 innerPosition = innerTransform.position;
@@ -76,9 +101,10 @@ public class CoinManager : MonoBehaviour
 			innerTransform.position = innerPosition;
 
 			// Get the frontmost tile's position and adjust it
-			Vector3 obstaclePosition = mCoinList.Last.Value.transform.position;
-			obstaclePosition.z = mDistanceAfter;
+			Vector3 coinPosition = mCoinList.Last.Value.transform.position;
+			coinPosition.z = mDistanceAfter;
 
+			// Position the new coin on the X-Axis
 			int xOffset = Random.Range(-1, 2);
 			Vector3 innerOffset = Vector3.zero;
 
@@ -91,15 +117,17 @@ public class CoinManager : MonoBehaviour
 				innerOffset.x += 1;
 			}
 
-			obstacle.transform.position = obstaclePosition;
+			coin.transform.position = coinPosition;
 
 			innerTransform.Translate(innerOffset);
 
-			obstacle.SetActive(true);
-
-			mCoinList.AddLast(obstacle);
-
+			// Adds the new coin to the scene and updates mDistanceAfter
+			coin.SetActive(true);
+			mCoinList.AddLast(coin);
 			mDistanceAfter += distanceBetweenCoins;
+
+			// Needed because it is disabled when a collision happens
+			coin.GetComponentInChildren<SpriteRenderer>().enabled = true;
 		}
 
 	}

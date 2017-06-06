@@ -1,16 +1,25 @@
-﻿using System.Collections;
+﻿/******************************************************************************
+* 
+* Class name: CoinCollider
+* Created by: Edgard Damiani
+* Description: Takes care of a coin's collision 
+* 
+******************************************************************************/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CoinCollider : MonoBehaviour
 {
-	// Use this for initialization
-	void Start ()
+	/*********************** Private methods *****************************/
+	void Start()
 	{
+
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void Update()
 	{
 		
 	}
@@ -19,14 +28,24 @@ public class CoinCollider : MonoBehaviour
 	{
 		if(other.GetComponentInChildren<CharacterController>() != null)
 		{
-			//AudioSource audio = GetComponent<AudioSource>();
-			//audio.Play();
-			gameObject.transform.parent.gameObject.SetActive(false);
-
 			GameObject.Find("ScoreManager").GetComponent<ScoreManager>().IncreaseCoinScore();
 
-			//other.gameObject.GetComponent<Player>().DecreaseEnergy();
-			//other.gameObject.GetComponent<AudioSource>().Play();
+			AudioSource audio = gameObject.GetComponent<AudioSource>();
+			//audio.Play();
+			StartCoroutine(PlaySound(audio));
 		}
+
+		//gameObject.transform.parent.gameObject.SetActive(false);
+	}
+
+	IEnumerator PlaySound(AudioSource audio)
+	{
+		gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
+		audio.Play();
+		yield return new WaitForSeconds(audio.clip.length);
+
+		//gameObject.SetActive(false);
+		gameObject.transform.parent.gameObject.SetActive(false);
 	}
 }

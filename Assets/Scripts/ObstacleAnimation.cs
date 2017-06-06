@@ -1,8 +1,17 @@
-﻿using UnityEngine;
+﻿/******************************************************************************
+* 
+* Class name: ObstacleAnimation
+* Created by: Edgard Damiani
+* Description: Creates the obstacle's wobbling animation 
+* 
+******************************************************************************/
+
+using UnityEngine;
 using System.Collections;
 
 public class ObstacleAnimation : MonoBehaviour
 {
+	/*********************** Public properties *****************************/
 	public bool isRotating = false;
 	public bool isFloating = false;
 
@@ -12,18 +21,19 @@ public class ObstacleAnimation : MonoBehaviour
 	public float floaterDuration = 1.0f;
 	public float floatRange = 0.5f;
 
+
+	/*********************** Private properties *****************************/
 	private float mFloatTimer = 0;
 	private bool mGoingUp = true;
-	private float mStartTime;
 
-	// Use this for initialization
-	void Start ()
+
+	/*********************** Public methods *****************************/
+	void Start()
 	{
-		mStartTime = Time.time;
+
 	}
 	
-	// Update is called once per frame
-	void Update ()
+	void Update()
 	{		
 		if(isRotating)
 		{

@@ -1,30 +1,58 @@
-﻿using System.Collections;
+﻿/******************************************************************************
+* 
+* Class name: ObstacleManager
+* Created by: Edgard Damiani
+* Description: Manages the creation and destruction of obstacles
+* 
+******************************************************************************/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ObstacleManager : MonoBehaviour
 {
-	public float		distanceToRemove = 50;
+	/*********************** Public properties *****************************/
+	/// <summary>Object's Transform that will be used to track obstacles' 
+	/// life span.</summary>
 	public Transform	targetToTrack;
-	public ObjectPooler	obstaclePooler;
-	public float		distanceBetweenObstacles = 1;
-	public int			obstaclesAfterPlayer = 5;
-	public int			obstaclesBeforePlayer = 2;
 
+	/// <summary>The object pooler that will hold the obstacles.</summary>
+	public ObjectPooler	obstaclePooler;
+
+	/// <summary>Distance between obstacles.</summary>
+	public float		distanceBetweenObstacles = 1;
+
+	/// <summary>Number of obstacles to be kept behind the 
+	/// tracked object.</summary>
+	public int obstaclesBeforePlayer = 2;
+
+	/// <summary>Number of obstacles to be created ahead of the 
+	/// tracked object.</summary>
+	public int			obstaclesAfterPlayer = 5;
+
+
+	/*********************** Private properties *****************************/
+	/// <summary>Holds the distance that should be traversed by the
+	/// tracked object so that new obstacles are creatd.</summary>
 	private float		mDistanceAfter;
-	private float		mDistanceBefore;
+
+	/// <summary>Holds the distance that should be traversed by the
+	/// tracked object so that old obstacles are removed.</summary>
+	//private float		mDistanceBefore;
+
+	/// <summary>A doubly-linked list of obstacles.</summary>
 	private LinkedList<GameObject> 
 						mObstacleList = new LinkedList<GameObject>();
 
-	// Use this for initialization
-	void Start ()
-	{
-		obstaclePooler.Initialize();
 
+	/*********************** Private methods *****************************/
+	private void Start ()
+	{
 		Vector3 position = targetToTrack.position;
 		position.y += 0.5f;
 
-		mDistanceBefore = position.z - obstaclesBeforePlayer * distanceBetweenObstacles;
+		//mDistanceBefore = position.z - obstaclesBeforePlayer * distanceBetweenObstacles;
 		mDistanceAfter = position.z + obstaclesAfterPlayer * distanceBetweenObstacles;
 
 		position.z += distanceBetweenObstacles;
@@ -68,8 +96,7 @@ public class ObstacleManager : MonoBehaviour
 		}
 	}
 	
-	// Update is called once per frame
-	void Update ()
+	private void Update()
 	{
 		Vector3 targetPosition = targetToTrack.position;
 
@@ -77,7 +104,7 @@ public class ObstacleManager : MonoBehaviour
 		{
 			mObstacleList.First.Value.SetActive(false);
 			mObstacleList.RemoveFirst();
-			mDistanceBefore += distanceBetweenObstacles;
+			//mDistanceBefore += distanceBetweenObstacles;
 
 			GameObject obstacle = obstaclePooler.GetObject();
 			Transform innerTransform = obstacle.transform.Find("Inner").transform;
@@ -90,7 +117,6 @@ public class ObstacleManager : MonoBehaviour
 			// Get the frontmost tile's position and adjust it
 			Vector3 obstaclePosition = mObstacleList.Last.Value.transform.position;
 			obstaclePosition.z = mDistanceAfter;
-			//tilePosition.y += 0.5f;
 
 			int xOffset = Random.Range(-1, 2);
 			Vector3 innerOffset = Vector3.zero;

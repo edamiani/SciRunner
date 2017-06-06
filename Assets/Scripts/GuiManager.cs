@@ -1,22 +1,19 @@
-﻿using System.Collections;
+﻿/******************************************************************************
+* 
+* Class name: GuiCollider
+* Created by: Edgard Damiani
+* Description: Manages the in-game's GUI interaction 
+* 
+******************************************************************************/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GuiManager : MonoBehaviour {
-
-	// Use this for initialization
-	void Start ()
-	{
-		transform.Find("GameOver").gameObject.SetActive(false);
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		
-	}
-
+public class GuiManager : MonoBehaviour
+{
+	/*********************** Public methods *****************************/
 	public void LoadMainMenu()
 	{
 		SceneManager.LoadScene("MainMenu");
@@ -30,5 +27,16 @@ public class GuiManager : MonoBehaviour {
 	public void ShowGameOverMenu()
 	{
 		transform.Find("GameOver").gameObject.SetActive(true);
+	}
+
+	/*********************** Public methods *****************************/
+	void Start()
+	{
+		transform.Find("GameOver").gameObject.SetActive(false);
+	}
+	
+	void Update()
+	{
+		
 	}
 }
