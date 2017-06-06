@@ -9,6 +9,7 @@ public class ScoreManager : MonoBehaviour
 	public GameObject scoreUI;
 	public GameObject scoreShadowUI;
 
+	private int mCoinScore = 0;
 	private int mScore = 0;
 
 	// Use this for initialization
@@ -20,8 +21,13 @@ public class ScoreManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		mScore = (int)(player.position.z * 10);
+		mScore = (int)(player.position.z * 10) + mCoinScore;
 		scoreUI.GetComponent<Text>().text = mScore.ToString();
 		scoreShadowUI.GetComponent<Text>().text = mScore.ToString();
+	}
+
+	public void IncreaseCoinScore()
+	{
+		mCoinScore += 10;
 	}
 }

@@ -8,7 +8,8 @@ public class Player : MonoBehaviour
 	public float				gravity	= 9.8f;
 	public float				lateralMovementRange = 1.0f;
 	public float				lateralMovementDuration = 1.0f;
-	public float				speed		= 1;
+	public float				speed = 1;
+	public GuiManager			guiManager;
 
 	private float				mCenterX = 0;
 	private CharacterController mCharacterController;
@@ -32,6 +33,19 @@ public class Player : MonoBehaviour
 		if(energy > 0)
 		{
 			float lateralMovement = Input.GetAxisRaw("Horizontal") * speed;
+
+			// Touch capturing
+			if(Input.GetMouseButtonDown(0))
+			{
+				if(Input.mousePosition.x < Screen.width / 2)
+				{
+					lateralMovement = -1;
+				}
+				else
+				{
+					lateralMovement = 1;
+				}
+			}
 
 			if(lateralMovement < 0 && !mIsMovingLaterally)
 			{
@@ -103,6 +117,8 @@ public class Player : MonoBehaviour
 		if(energy == 0)
 		{
 			transform.Find("PlayerMesh").gameObject.SetActive(false);
+
+			guiManager.ShowGameOverMenu();
 		}
 	}
 }
