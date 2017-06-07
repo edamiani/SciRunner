@@ -52,13 +52,12 @@ public class CameraMovement : MonoBehaviour
 
 		float currentDistance = direction.magnitude;
 
-		if(currentDistance > distance * 1.2)
-		{
-			float newDistance = Mathf.SmoothStep(currentDistance, distance, (1 - (distance / currentDistance)) * 0.8f);
-			Vector3 directionTimesDistance = direction.normalized * newDistance;
-			Vector3 position = pointToFollow + directionTimesDistance;
+		// Always moves to halfway the desired distance
+		float newDistance = currentDistance - ((currentDistance - distance) / 2.0f);
 
-			transform.position = position;
-		}
+		Vector3 directionTimesDistance = direction.normalized * newDistance;
+		Vector3 position = pointToFollow + directionTimesDistance;
+
+		transform.position = position;
 	}
 }

@@ -25,8 +25,6 @@ public class ObstacleCollider : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		//AudioSource audio = GetComponent<AudioSource>();
-		//audio.Play();
 		gameObject.transform.parent.gameObject.SetActive(false);
 
 		other.gameObject.GetComponent<Player>().DecreaseEnergy();

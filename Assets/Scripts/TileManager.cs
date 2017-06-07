@@ -61,6 +61,7 @@ public class TileManager : MonoBehaviour
 		{
 			GameObject tile = tilePooler.GetObject();
 
+			// Changes the tile color randomly
 			Renderer tileRenderer = tile.GetComponentInChildren<Renderer>();
 			Color color = tileRenderer.material.color;
 			color.r = Random.Range(0.0f, 1.0f);
@@ -71,13 +72,13 @@ public class TileManager : MonoBehaviour
 			tile.transform.position = position;
 
 			Vector3 scale = Vector3.zero;
+			// Scale down the tile so it doesn't suffer from z-fighting
 			scale.x = scale.y = scale.z = 0.999f;
 			tile.transform.localScale = scale;
 
+			// Activates the coin, add it to the coin list and position it on the Z-axis
 			tile.SetActive(true);
-
 			mTileList.AddLast(tile);
-
 			position.z += tileSize;
 		}
 	}
@@ -100,6 +101,7 @@ public class TileManager : MonoBehaviour
 			tile.transform.position = tilePosition;
 			tile.SetActive(true);
 
+			// Changes the tile color randomly
 			Renderer tileRenderer = tile.GetComponentInChildren<Renderer>();
 			Color color = tileRenderer.material.color;
 			color.r = Random.Range(0.0f, 1.0f);

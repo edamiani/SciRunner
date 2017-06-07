@@ -121,12 +121,12 @@ public class CoinManager : MonoBehaviour
 
 			innerTransform.Translate(innerOffset);
 
-			// Adds the new coin to the scene and updates mDistanceAfter
+			// Add the new coin to the scene and update mDistanceAfter
 			coin.SetActive(true);
 			mCoinList.AddLast(coin);
 			mDistanceAfter += distanceBetweenCoins;
 
-			// Needed because it is disabled when a collision happens
+			// Needed because the coin's renderer disabled when a collision happens
 			coin.GetComponentInChildren<SpriteRenderer>().enabled = true;
 		}
 

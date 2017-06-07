@@ -52,7 +52,6 @@ public class ObstacleManager : MonoBehaviour
 		Vector3 position = targetToTrack.position;
 		position.y += 0.5f;
 
-		//mDistanceBefore = position.z - obstaclesBeforePlayer * distanceBetweenObstacles;
 		mDistanceAfter = position.z + obstaclesAfterPlayer * distanceBetweenObstacles;
 
 		position.z += distanceBetweenObstacles;
@@ -63,6 +62,7 @@ public class ObstacleManager : MonoBehaviour
 
 			GameObject obstacle = obstaclePooler.GetObject();
 
+			// Change the obstacle color randomly
 			Renderer tileRenderer = obstacle.GetComponentInChildren<Renderer>();
 			Color color = tileRenderer.material.color;
 			color.r = Random.Range(0.0f, 1.0f);
@@ -70,6 +70,7 @@ public class ObstacleManager : MonoBehaviour
 			color.b = Random.Range(0.0f, 1.0f);
 			obstacle.GetComponentInChildren<Renderer>().material.color = color;
 
+			// Change the obstacle position on the X-axis
 			int xOffset = Random.Range(-1, 2);
 
 			Vector3 innerOffset = Vector3.zero;
@@ -88,10 +89,9 @@ public class ObstacleManager : MonoBehaviour
 			Transform innerTransform = obstacle.transform.Find("Inner").transform;
 			innerTransform.Translate(innerOffset);
 
+			// Activates the obstacle, add it to the obstacle list and position it on the Z-axis
 			obstacle.SetActive(true);
-
 			mObstacleList.AddLast(obstacle);
-
 			position.z += distanceBetweenObstacles;
 		}
 	}
@@ -104,9 +104,17 @@ public class ObstacleManager : MonoBehaviour
 		{
 			mObstacleList.First.Value.SetActive(false);
 			mObstacleList.RemoveFirst();
-			//mDistanceBefore += distanceBetweenObstacles;
 
 			GameObject obstacle = obstaclePooler.GetObject();
+
+			// Change the obstacle color randomly
+			Renderer tileRenderer = obstacle.GetComponentInChildren<Renderer>();
+			Color color = tileRenderer.material.color;
+			color.r = Random.Range(0.0f, 1.0f);
+			color.g = Random.Range(0.0f, 1.0f);
+			color.b = Random.Range(0.0f, 1.0f);
+			obstacle.GetComponentInChildren<Renderer>().material.color = color;
+
 			Transform innerTransform = obstacle.transform.Find("Inner").transform;
 
 			// Resets obstacle's local position
@@ -135,13 +143,6 @@ public class ObstacleManager : MonoBehaviour
 			innerTransform.Translate(innerOffset);
 
 			obstacle.SetActive(true);
-
-			Renderer tileRenderer = obstacle.GetComponentInChildren<Renderer>();
-			Color color = tileRenderer.material.color;
-			color.r = Random.Range(0.0f, 1.0f);
-			color.g = Random.Range(0.0f, 1.0f);
-			color.b = Random.Range(0.0f, 1.0f);
-			tileRenderer.material.color = color;
 
 			mObstacleList.AddLast(obstacle);
 
